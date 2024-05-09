@@ -1,0 +1,15 @@
+install.packages("git2r")
+library(git2r)
+
+# Replace '/path/to/your/project' with the path to your R project directory
+repo_path <- 'C:/Users/ajdel/Desktop/Alex/PhD Stuff/CSCI6410/Practicals/Practical 0 Project'
+repo <- init(repo_path)
+# Add all files in the project directory
+add(repo, path = "Practical 0 Project.Rproj")
+config(user.name = "Alexandra Del Favero-Campbell", user.email = "alexandra.dfc@dal.ca")
+commit(repo, message = "Initial commit")
+# Set upstream branch for 'master'
+branch_set_upstream(repo, "master", "origin/master")
+
+# Push changes
+push(repo)
