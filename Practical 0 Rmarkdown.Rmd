@@ -1,0 +1,108 @@
+---
+title: "Practical 0"
+author: "Alexandra Del Favero-Campbell"
+date: "2024-05-09"
+output:
+  html_document:
+    fig_width: 14
+    fig_height: 14
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+library(dplyr)
+library(tidyverse)
+library(datasauRus)
+```
+
+```{r}
+dino_data<-datasaurus_dozen %>%
+  filter(dataset == "dino")
+```
+```{r}
+ggplot(data=dino_data,mapping=aes(x=x,y=y))+geom_point()
+```
+Calculate the summary statistic (i.e., correlation coefficient) between x and y.
+```{r}
+dino_data %>% 
+  summarize(r=cor(x,y))
+```
+3. Plot y vs. x for the "star" dataset. Then, calculate the correlation coefficient between x and y for this dataset. How does this value compare to the r in "dino"?
+```{r}
+star_data<-datasaurus_dozen %>%
+  filter(dataset=="star")
+```
+
+Plot x and y of star dataset
+```{r}
+ggplot(data=star_data,mapping=aes(x=x,y=y))+
+  geom_point()
+```
+Calculate correlation coefficient of x and y from star dataset.
+```{r}
+star_data %>%
+  summarize(r=cor(x,y))
+```
+Comparing both correlation coefficients, we see that both datasets have a quite low negative correlation coefficient between their respective x and y variables. However, the dino dataset has a bit of a minutely higher correlation compared to the star dataset.
+
+4. Plot y vs. x for the "circle" dataset. Then, calculate the correlation coefficient between x and y for this dataset. How does this value compare to the r of dino?
+
+A. Filter out our data so that we only are looking at the "circle" dataset.
+```{r}
+circle_data <- datasaurus_dozen %>%
+  filter(dataset == "circle")
+```
+
+B. Plot visualization of x and y of "circle" dataset.
+```{r}
+ggplot(data = circle_data, mapping = aes(x = x, y = y)) +
+  geom_point()
+```
+C. Calculate correlation coefficient (r) between x and y and compare it to the dino dataset.
+```{r}
+circle_data %>%
+  summarize(r=cor(x,y))
+```
+```{r}
+dino_data %>% 
+  summarize(r=cor(x,y))
+```
+Both of these correlation coefficients are quite low and both show a negative relationship. However, the circle dataset has a slightly higher correlation between x and y than the dino dataset does.
+
+5. Plot all datasets at once. In order to do this we will make use of facetting.
+```{r}
+ggplot(datasaurus_dozen,aes(x=x,y=y,color=dataset))+
+  geom_point()+
+  facet_wrap(~dataset,ncol=3)+
+  theme(legend.position="none")
+```
+Now we will also use the group_by function to generate all of the correlation coefficients for these plots.
+```{r}
+datasaurus_dozen %>%
+  group_by(dataset) %>%
+             summarize(r=cor(x,y))
+```
+
